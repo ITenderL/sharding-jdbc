@@ -13,8 +13,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @Author: ITender
@@ -103,4 +105,54 @@ public class OrderDaoTest {
         dictDao.deleteDict(1L);
         dictDao.deleteDict(2L);
     }
+
+    @Test
+    public void test01() {
+        int[] array = {8, 6, 5, 3, 6, 4, 6, 6, 6};
+        List<Integer> list = Arrays.stream(array).boxed().collect(Collectors.toList());
+        //groupingBy分组
+        Map<Integer, Long> map = list.stream().collect(Collectors.groupingBy(Integer::intValue, Collectors.counting()));
+        for (Integer key : map.keySet()) {
+            if (map.get(key) > (long) (list.size() / 2)) {
+                System.out.println(key);
+            }
+
+        }
+        // System.out.println(5/2);
+    }
+
+    @Test
+    public void findKth() {
+        int[] a = {5, 9, 3, 6, 2};
+        Arrays.sort(a);
+        for (int i : a) {
+            System.out.print(i + ", ");
+        }
+    }
+
+    static class ListNode {
+        int val;
+        ListNode next;
+
+        ListNode(int x) {
+            val = x;
+        }
+    }
+
+    public static void main(String[] args) {
+        ListNode head = new ListNode(0);
+        ListNode firstNode = new ListNode(1);
+        ListNode secondNode = new ListNode(2);
+        ListNode thirdNode = new ListNode(3);
+        head.val = 1;
+        head.next = firstNode;
+        firstNode.next = secondNode;
+        secondNode.next = thirdNode;
+        a(head);
+    }
+
+    public static void a(ListNode l1) {
+        System.out.println("secondNode 的值为：" + l1.next.next.val);
+    }
+
 }
