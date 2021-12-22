@@ -11,6 +11,8 @@ import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -69,7 +71,7 @@ public class OrderDaoTest {
 
     @Test
     public void testInsertUser() {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 10; i < 15; i++) {
             Long id = i + 1L;
             userDao.insertUser(id, "姓名" + id);
         }
@@ -78,8 +80,8 @@ public class OrderDaoTest {
     @Test
     public void testSelectUserbyIds() {
         List<Long> userIds = new ArrayList<>();
-        userIds.add(1L);
-        userIds.add(2L);
+        userIds.add(11L);
+        userIds.add(12L);
         List<Map> users = userDao.selectUserbyIds(userIds);
         System.out.println(users);
     }
@@ -153,6 +155,28 @@ public class OrderDaoTest {
 
     public static void a(ListNode l1) {
         System.out.println("secondNode 的值为：" + l1.next.next.val);
+    }
+
+    /**
+     * 泛型测试
+     *
+     * @throws NoSuchMethodException
+     * @throws InvocationTargetException
+     * @throws IllegalAccessException
+     */
+    @Test
+    public void testT() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        List<Integer> list = new ArrayList<>();
+
+        list.add(12);
+        // 这里直接添加会报错
+        // list.add("a");
+        Class<? extends List> clazz = list.getClass();
+        Method add = clazz.getDeclaredMethod("add", Object.class);
+        // 但是通过反射添加是可以的
+        // 这就说明在运行期间所有的泛型信息都会被擦掉
+        add.invoke(list, "kl");
+        System.out.println(list);
     }
 
 }
